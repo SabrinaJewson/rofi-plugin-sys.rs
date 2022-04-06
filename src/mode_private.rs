@@ -168,6 +168,9 @@ pub struct Mode {
     pub module: *mut GModule,
 }
 
+// Mode needs to be put in a static
+unsafe impl Sync for Mode {}
+
 /// An opaque C type from GLib.
 #[derive(Debug, Copy, Clone)]
 #[repr(C)]
