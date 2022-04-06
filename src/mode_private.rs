@@ -1,10 +1,11 @@
 //! Bindings to mode-private.h
 
 use {
-    crate::{mode::ModeMode, types::RofiIntMatcher},
+    crate::types::RofiIntMatcher,
     ::std::{
         ffi::c_void,
         os::raw::{c_char, c_int, c_uint},
+        ptr,
     },
 };
 
@@ -13,7 +14,7 @@ pub const ABI_VERSION: c_uint = 6;
 
 /// Free the switcher.
 ///
-/// Only has to be used when the switcher object itself is dynamic and has data in [`Mode::ed`].
+/// Only to be used when the switcher object itself is dynamic and has data in [`Mode::ed`].
 pub type ModeFree = Option<unsafe extern "C" fn(data: *mut Mode)>;
 
 /// Get the string to display for the entry.
@@ -88,7 +89,7 @@ pub type ModeResult = Option<
         menu_retv: c_int,
         input: *mut *mut c_char,
         selected_line: c_uint,
-    ) -> ModeMode,
+    ) -> c_int,
 >;
 
 /// Preprocess the input for sorting.
@@ -166,6 +167,40 @@ pub struct Mode {
 
     /// Module
     pub module: *mut GModule,
+}
+
+impl Mode {
+    const DEFAULT: Self = Self {
+        abi_version: ABI_VERSION,
+        name: ptr::null_mut(),
+        cfg_name_key: [0; 128],
+        display_name: ptr::null_mut(),
+        _init: None,
+        _destroy: None,
+        _get_num_entries: None,
+        _result: None,
+        _token_match: None,
+        _get_display_value: None,
+        _get_icon: None,
+        _get_completion: None,
+        _preprocess_input: None,
+        _get_message: None,
+        private_data: ptr::null_mut(),
+        free: None,
+        ed: ptr::null_mut(),
+        module: ptr::null_mut(),
+    };
+
+    /// Create a [`Mode`] with all `None`/null fields.
+    pub const fn default() -> Self {
+        Self::DEFAULT
+    }
+}
+
+impl Default for Mode {
+    fn default() -> Self {
+        Self::DEFAULT
+    }
 }
 
 // Mode needs to be put in a static

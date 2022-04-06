@@ -8,58 +8,57 @@ use {
     },
 };
 
-/// Enum used to sum the possible states of ROFI.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[repr(C)]
-pub enum ModeMode {
-    /// Exit
-    Exit = 1000,
-    /// Skip to the next cycle-able dialog
-    NextDialog = 1001,
-    /// Reload current dialog
-    ReloadDialog = 1002,
-    /// Previous dialog
-    PreviousDialog = 1003,
-    /// Reloads the dialog and unset user input
-    ResetDialog = 1004,
-}
+/// Mode to exit Rofi.
+pub const EXIT: c_int = 1000;
+
+/// Mode to skip to the next cycle-able dialog.
+pub const NEXT_DIALOG: c_int = 1001;
+
+/// Mode to reload current dialog.
+pub const RELOAD_DIALOG: c_int = 1002;
+
+/// Mode to go to the previous dialog.
+pub const PREVIOUS_DIALOG: c_int = 1003;
+
+/// Mode to reload the dialog and unset user input.
+pub const RESET_DIALOG: c_int = 1004;
 
 /// States returned by the rofi window.
 pub mod menu {
-    use ::std::os::raw::c_uint;
+    use ::std::os::raw::c_int;
 
     /// Entry is selected.
-    pub const OK: c_uint = 0x00010000;
+    pub const OK: c_int = 0x00010000;
 
     /// User canceled the operation. (e.g. pressed escape)
-    pub const CANCEL: c_uint = 0x00020000;
+    pub const CANCEL: c_int = 0x00020000;
 
     /// User requested a mode switch
-    pub const NEXT: c_uint = 0x00040000;
+    pub const NEXT: c_int = 0x00040000;
 
     /// Custom (non-matched) input was entered.
-    pub const CUSTOM_INPUT: c_uint = 0x00080000;
+    pub const CUSTOM_INPUT: c_int = 0x00080000;
 
     /// User wanted to delete entry from history.
-    pub const ENTRY_DELETE: c_uint = 0x00100000;
+    pub const ENTRY_DELETE: c_int = 0x00100000;
 
     /// User wants to jump to another switcher.
-    pub const QUICK_SWITCH: c_uint = 0x00200000;
+    pub const QUICK_SWITCH: c_int = 0x00200000;
 
     /// User wants to jump to custom command.
-    pub const CUSTOM_COMMAND: c_uint = 0x00800000;
+    pub const CUSTOM_COMMAND: c_int = 0x00800000;
 
     /// Go to the previous menu.
-    pub const PREVIOUS: c_uint = 0x00400000;
+    pub const PREVIOUS: c_int = 0x00400000;
 
     /// Go to the complete.
-    pub const COMPLETE: c_uint = 0x01000000;
+    pub const COMPLETE: c_int = 0x01000000;
 
     /// Bindings specifics
-    pub const CUSTOM_ACTION: c_uint = 0x10000000;
+    pub const CUSTOM_ACTION: c_int = 0x10000000;
 
     /// Mask
-    pub const LOWER_MASK: c_uint = 0x0000FFF;
+    pub const LOWER_MASK: c_int = 0x0000FFF;
 }
 
 extern "C" {
@@ -112,7 +111,7 @@ extern "C" {
 
     /// Acts on the user interaction.
     ///
-    /// Returns the next [`ModeMode`].
+    /// Returns the next mode state.
     ///
     /// - `menu_retv`: The menu return value.
     /// - `input`: Pointer to the user input string. \[in\] \[out\]
@@ -122,7 +121,7 @@ extern "C" {
         menu_retv: c_int,
         input: *mut *mut c_char,
         selected_line: c_uint,
-    ) -> ModeMode;
+    ) -> c_int;
 
     /// Match entry against the set of tokens.
     ///
