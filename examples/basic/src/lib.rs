@@ -31,8 +31,6 @@ pub static mut mode: rofi_plugin_sys::Mode = rofi_plugin_sys::Mode {
     ..rofi_plugin_sys::Mode::default()
 };
 
-const _: [(); 264] = [(); std::mem::size_of::<rofi_plugin_sys::Mode>()];
-
 unsafe extern "C" fn init(sw: *mut rofi_plugin_sys::Mode) -> c_int {
     if unsafe { mode_state(sw) }.is_null() {
         let state = State {
@@ -45,7 +43,6 @@ unsafe extern "C" fn init(sw: *mut rofi_plugin_sys::Mode) -> c_int {
 }
 
 unsafe extern "C" fn destroy(sw: *mut rofi_plugin_sys::Mode) {
-    println!("Destroy!");
     let ptr = unsafe { mode_state_mut(sw) };
     if ptr.is_null() {
         return;
@@ -68,13 +65,7 @@ unsafe extern "C" fn result(
     _input: *mut *mut c_char,
     _selected_line: c_uint,
 ) -> c_int {
-    if mretv & rofi_plugin_sys::menu::NEXT != 0 {
-        rofi_plugin_sys::NEXT_DIALOG
-    } else if mretv & rofi_plugin_sys::menu::PREVIOUS != 0 {
-        rofi_plugin_sys::PREVIOUS_DIALOG
-    } else if mretv & rofi_plugin_sys::menu::QUICK_SWITCH != 0 {
-        mretv & rofi_plugin_sys::menu::LOWER_MASK
-    } else if mretv & rofi_plugin_sys::menu::OK != 0
+    if mretv & rofi_plugin_sys::menu::OK != 0
         || mretv & rofi_plugin_sys::menu::ENTRY_DELETE == rofi_plugin_sys::menu::ENTRY_DELETE
     {
         rofi_plugin_sys::RELOAD_DIALOG
