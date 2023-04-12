@@ -10,9 +10,9 @@ keywords = ["rofi", "plugin"]
 categories = ["external-ffi-bindings"]
 
 [dependencies]
-bitflags = "1.3.2"
-cairo-sys-rs = "0.15.1"
-glib-sys = "0.15.10"
+bitflags = "2.0.1"
+cairo-sys-rs = "0.17.0"
+glib-sys = "0.17.4"
 
 [workspace]
 members = ["examples/basic"]

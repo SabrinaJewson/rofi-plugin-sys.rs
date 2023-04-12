@@ -42,6 +42,7 @@ extern "C" {
 bitflags! {
     /// Style of text highlight.
     #[repr(transparent)]
+    #[derive(Clone, Copy, Debug, PartialEq)]
     pub struct RofiHighlightStyle: c_uint {
         const BOLD = 1;
         const UNDERLINE = 2;
@@ -245,13 +246,13 @@ bitflags! {
         /// Middle left
         const WEST = 8;
         /// Top left corner.
-        const NORTH_WEST = Self::NORTH.bits | Self::WEST.bits;
+        const NORTH_WEST = Self::NORTH.bits() | Self::WEST.bits();
         /// Top right corner.
-        const NORTH_EAST = Self::NORTH.bits | Self::EAST.bits;
+        const NORTH_EAST = Self::NORTH.bits() | Self::EAST.bits();
         /// Bottom right.
-        const SOUTH_EAST = Self::SOUTH.bits | Self::EAST.bits;
+        const SOUTH_EAST = Self::SOUTH.bits() | Self::EAST.bits();
         /// Bottom left.
-        const SOUTH_WEST = Self::SOUTH.bits | Self::WEST.bits;
+        const SOUTH_WEST = Self::SOUTH.bits() | Self::WEST.bits();
     }
 }
 
