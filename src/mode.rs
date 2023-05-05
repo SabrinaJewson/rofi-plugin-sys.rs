@@ -97,7 +97,7 @@ extern "C" {
     /// - `selected_line`: The entry to query
     /// - `height`: The desired height of the icon
     pub fn mode_get_icon(
-        mode: *const Mode,
+        mode: *mut Mode,
         selected_line: c_uint,
         height: c_int,
     ) -> *mut cairo_sys::cairo_surface_t;

@@ -47,9 +47,11 @@ bitflags! {
         const BOLD = 1;
         const UNDERLINE = 2;
         const STRIKETHROUGH = 16;
-        const SMALL_CAPS = 32;
         const ITALIC = 4;
         const COLOR = 8;
+        const UPPERCASE = 32;
+        const LOWERCASE = 64;
+        const CAPITALIZE = 128;
     }
 }
 

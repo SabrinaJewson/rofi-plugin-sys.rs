@@ -167,6 +167,12 @@ pub struct Mode {
 
     /// Module
     pub module: *mut GModule,
+
+    /// Fallback icon
+    pub fallback_icon_fetch_uid: u32,
+
+    /// Fallback icon
+    pub fallback_icon_not_found: u32,
 }
 
 impl Mode {
@@ -189,6 +195,8 @@ impl Mode {
         free: None,
         ed: ptr::null_mut(),
         module: ptr::null_mut(),
+        fallback_icon_fetch_uid: 0,
+        fallback_icon_not_found: 0,
     };
 
     /// Create a [`Mode`] with all `None`/null fields.
