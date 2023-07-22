@@ -24,3 +24,5 @@ pub use mode::*;
 pub mod icon_fetcher;
 
 pub mod helper;
+
+pub mod view;
