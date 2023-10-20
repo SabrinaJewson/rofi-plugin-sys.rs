@@ -2,7 +2,7 @@
 
 use {
     crate::types::RofiIntMatcher,
-    ::std::{
+    std::{
         ffi::c_void,
         os::raw::{c_char, c_int, c_uint},
         ptr,
@@ -10,7 +10,17 @@ use {
 };
 
 /// ABI version to check if loaded plugin is compatible.
-pub const ABI_VERSION: c_uint = 6;
+pub const ABI_VERSION: c_uint = 7;
+
+/// Indicator of the mode's type.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub enum ModeType {
+    Unset = 0x0,
+    Switcher = 0x1,
+    Completer = 0x2,
+    Dmenu = 0x4,
+}
 
 /// Free the switcher.
 ///
@@ -105,6 +115,23 @@ pub type ModePreprocessInput =
 /// Returns the (valid Pango markup) message to display.
 pub type ModeGetMessage = Option<unsafe extern "C" fn(sw: *const Mode) -> *mut c_char>;
 
+/// Returns a new instance of this mode.
+pub type ModeCreate = Option<unsafe extern "C" fn() -> *const Mode>;
+
+/// Handle the user accepting an entry in completion mode.
+///
+/// - `input`: The input string
+/// - `selected_line`: The selected line
+/// - `path`: The path that was completed
+pub type ModeCompleterResult = Option<
+    unsafe extern "C" fn(
+        sw: *const Mode,
+        input: *mut *mut c_char,
+        selected_line: c_uint,
+        path: *mut *mut c_char,
+    ),
+>;
+
 /// Structure defining a switcher.
 ///
 /// Access should be done through `mode_*` functions,
@@ -162,6 +189,12 @@ pub struct Mode {
     /// Free the switcher.
     pub free: ModeFree,
 
+    /// Create mode.
+    pub create: ModeCreate,
+
+    /// If this mode is used as a completer.
+    pub completer_result: ModeCompleterResult,
+
     /// Extra fields for the script.
     pub ed: *mut c_void,
 
@@ -173,6 +206,9 @@ pub struct Mode {
 
     /// Fallback icon
     pub fallback_icon_not_found: u32,
+
+    /// Type of mode
+    pub r#type: ModeType,
 }
 
 impl Mode {
@@ -193,10 +229,13 @@ impl Mode {
         _get_message: None,
         private_data: ptr::null_mut(),
         free: None,
+        create: None,
+        completer_result: None,
         ed: ptr::null_mut(),
         module: ptr::null_mut(),
         fallback_icon_fetch_uid: 0,
         fallback_icon_not_found: 0,
+        r#type: ModeType::Switcher,
     };
 
     /// Create a [`Mode`] with all `None`/null fields.

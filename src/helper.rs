@@ -2,9 +2,11 @@
 //!
 //! This corresponds to `helper.h`.
 
+use crate::{Property, PropertyType, ThemeWidget};
+
 use {
     crate::{RofiIntMatcher, RofiRangePair},
-    ::std::os::raw::{c_char, c_int, c_long, c_uint},
+    std::os::raw::{c_char, c_int, c_long, c_uint},
 };
 
 extern "C" {
@@ -297,6 +299,42 @@ extern "C" {
     ///
     /// - `file`: File name passed to option.
     /// - `ext`: File extension passed to option.
+    /// - `parent_dir`: Path to parent directory
     #[link_name = "helper_get_theme_path"]
-    pub fn get_theme_path(file: *const c_char, ext: *const c_char) -> *mut c_char;
+    pub fn get_theme_path(
+        file: *const c_char,
+        ext: *const *const c_char,
+        parent_dir: *const c_char,
+    ) -> *mut c_char;
+
+    /// Find the configuration element. If not exact, the closest specified element is returned.
+    ///
+    /// Returns ThemeWidget, if it is found
+    ///
+    /// - `name`: The name of the element to find.
+    /// - `state`: The state of the element.
+    /// - `exact`: If the match should be exact, or a parent can be included.
+    #[link_name = "rofi_config_find_widget"]
+    pub fn find_widget(
+        name: *const c_char,
+        state: *const c_char,
+        exact: glib_sys::gboolean,
+    ) -> ThemeWidget;
+
+    /// Find the property on the widget. If not exact, the parents are searched
+    /// recursively until match is found.
+    ///
+    /// Returns property, if it is found.
+    ///
+    /// - `widget`: The widget to find the property on.
+    /// - `ty`: The PropertyType to find.
+    /// - `property`: The property to find.
+    /// - `exact`: If the property should only be found on this widget, or on parents if not found.
+    #[link_name = "rofi_theme_find_property"]
+    pub fn find_property(
+        widget: *const ThemeWidget,
+        ty: PropertyType,
+        property: *const c_char,
+        exact: glib_sys::gboolean,
+    ) -> *mut Property;
 }

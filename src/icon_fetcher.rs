@@ -2,7 +2,7 @@
 //!
 //! This corresponds to `rofi-icon-fetcher.h`.
 
-use ::std::os::raw::{c_char, c_int};
+use std::os::raw::{c_char, c_int};
 
 extern "C" {
     /// Initialize the icon fetcher.
@@ -41,6 +41,12 @@ extern "C" {
     /// Accepts a request UID.
     #[link_name = "rofi_icon_fetcher_get"]
     pub fn get(uid: u32) -> *mut cairo_sys::cairo_surface_t;
+
+    /// If the surface is used, the user should reference the surface.
+    ///
+    /// Returns false if a query was done and failed, true otherwise.
+    #[link_name = "rofi_icon_fetcher_get_ex"]
+    pub fn get_ex(uid: u32, cairo_surface_t: *mut cairo_sys::cairo_surface_t);
 
     /// Checks if a file is a supported image (by looking at its extension).
     ///

@@ -2,7 +2,7 @@
 
 use {
     crate::{mode_private::Mode, types::RofiIntMatcher},
-    ::std::{
+    std::{
         ffi::c_void,
         os::raw::{c_char, c_int, c_uint},
     },
@@ -25,7 +25,7 @@ pub const RESET_DIALOG: c_int = 1004;
 
 /// States returned by the rofi window.
 pub mod menu {
-    use ::std::os::raw::c_int;
+    use std::os::raw::c_int;
 
     /// Entry is selected.
     pub const OK: c_int = 0x00010000;
@@ -167,4 +167,36 @@ extern "C" {
     /// Returns a newly allocated (valid Pango markup) message to display,
     /// which the user must free.
     pub fn mode_get_message(mode: *const Mode) -> *const c_char;
+
+    /// Returns a new instance of the mode.
+    pub fn mode_create(mode: *const Mode) -> Mode;
+
+    /// Acts on user interaction.
+    ///
+    /// Returns the next Mode.
+    ///
+    /// - `sw`: The entry to query.
+    /// - `menu_retv`: The menu return value.
+    /// - `input`: Input to process.
+    /// - `selected_line`: The index of the entry to match.
+    /// - `path`: Path to selected file.
+    pub fn mode_completer_result(
+        sw: Mode,
+        menu_retv: c_int,
+        input: c_char,
+        selected_line: c_uint,
+        path: c_char,
+    );
+
+    /**
+     * @param sw The mode to query.
+     *
+     * Check if mode is a valid completer.
+     *
+     * @returns TRUE if mode can be used as completer.
+     */
+    /// Checks if the given mode is a valid completer.
+    ///
+    /// Returns true if the mode can be used as a completer
+    pub fn mode_is_completer(mode: *const Mode);
 }

@@ -1,6 +1,6 @@
 //! Bindings to rofi-types.h
 
-use ::{
+use {
     bitflags::bitflags,
     std::{
         ffi::c_void,
@@ -306,6 +306,46 @@ pub struct Property {
     pub ty: PropertyType,
     /// Value
     pub value: PropertyValue,
+}
+
+#[repr(C)]
+pub enum ThemeMediaType {
+    /// Minimum width constraint.
+    MinWidth,
+    /// Maximum width constraint.
+    MaxWidth,
+    /// Minimum height constraint.
+    MinHeight,
+    /// Maximum height constraint.
+    MaxHeight,
+    /// Monitor id constraint.
+    MonId,
+    /// Minimum aspect ratio constraint.
+    MinAspectRatio,
+    /// Maximum aspect ratio constraint.
+    MaxAspectRatio,
+    /// Boolean option for use with env.
+    Boolean,
+    /// Invalid entry.
+    Invalid,
+}
+
+#[repr(C)]
+pub struct ThemeMedia {
+    r#type: ThemeMediaType,
+    value: c_double,
+    boolv: glib_sys::gboolean,
+}
+
+#[repr(C)]
+pub struct ThemeWidget {
+    pub set: c_int,
+    pub name: *const c_char,
+    pub num_widgets: c_uint,
+    pub widgets: *const *const ThemeWidget,
+    pub media: *const ThemeMedia,
+    pub properties: *const glib_sys::GHashTable,
+    pub parent: *const ThemeWidget,
 }
 
 /// Structure to hold a range.
