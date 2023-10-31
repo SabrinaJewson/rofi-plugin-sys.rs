@@ -9,8 +9,41 @@ use {
     },
 };
 
+#[cfg(any(doc, rofi_next))]
+use ::{bitflags::bitflags, std::mem};
+
 /// ABI version to check if loaded plugin is compatible.
-pub const ABI_VERSION: c_uint = 6;
+///
+/// When `cfg(rofi_next)` is enabled, this is 7; otherwise, it is 6.
+pub const ABI_VERSION: c_uint = if cfg!(rofi_next) { 7 } else { 6 };
+
+#[cfg(any(doc, rofi_next))]
+bitflags! {
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[repr(transparent)]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+    pub struct ModeType: c_uint {
+        /// Mode type is not set.
+        const UNSET = 0b0000;
+        /// A normal mode.
+        const SWITCHER = 0b0001;
+        /// A mode that can be used to completer.
+        const COMPLETER = 0b0010;
+    }
+}
+
+#[repr(C)]
+#[cfg(rofi_next)]
+#[allow(dead_code)]
+enum ModeTypeSizeChecker {
+    Unset = 0,
+    Switcher = 1,
+    Completer = 2,
+}
+
+// Make sure the enum's sizes match
+#[cfg(rofi_next)]
+const _: [(); mem::size_of::<ModeType>()] = [(); mem::size_of::<ModeTypeSizeChecker>()];
 
 /// Free the switcher.
 ///
@@ -105,6 +138,27 @@ pub type ModePreprocessInput =
 /// Returns the (valid Pango markup) message to display.
 pub type ModeGetMessage = Option<unsafe extern "C" fn(sw: *const Mode) -> *mut c_char>;
 
+/// Create a new instance of this mode.
+/// Free (free) result after use, after using `mode_destroy`.
+///
+/// **Semver-exempt and only available with `cfg(rofi_next)`.**
+#[cfg(any(doc, rofi_next))]
+pub type ModeCreate = Option<unsafe extern "C" fn() -> *mut Mode>;
+
+/// Handle the user accepting an entry in completion mode.
+/// Returns the next action to take.
+/// - `sw`: The mode pointer
+/// - `menu_retv`: The return value
+/// - `input`: The input string
+/// - `selected_line`: The selected line
+/// - `path`: the path that was completed
+///
+/// **Semver-exempt and only available with `cfg(rofi_next)`.**
+#[cfg(any(doc, rofi_next))]
+pub type ModeCompleterResult = Option<
+    unsafe extern "C" fn(*mut Mode, c_int, *mut *mut c_char, c_uint, *mut *mut c_char) -> c_uint,
+>;
+
 /// Structure defining a switcher.
 ///
 /// Access should be done through `mode_*` functions,
@@ -162,6 +216,18 @@ pub struct Mode {
     /// Free the switcher.
     pub free: ModeFree,
 
+    /// Create mode.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    pub _create: ModeCreate,
+
+    /// If this mode is used as a completer.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    pub _completer_result: ModeCompleterResult,
+
     /// Extra fields for the script.
     pub ed: *mut c_void,
 
@@ -173,6 +239,12 @@ pub struct Mode {
 
     /// Fallback icon
     pub fallback_icon_not_found: u32,
+
+    /// Type.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    pub r#type: ModeType,
 }
 
 impl Mode {
@@ -193,10 +265,16 @@ impl Mode {
         _get_message: None,
         private_data: ptr::null_mut(),
         free: None,
+        #[cfg(any(doc, rofi_next))]
+        _create: None,
+        #[cfg(any(doc, rofi_next))]
+        _completer_result: None,
         ed: ptr::null_mut(),
         module: ptr::null_mut(),
         fallback_icon_fetch_uid: 0,
         fallback_icon_not_found: 0,
+        #[cfg(any(doc, rofi_next))]
+        r#type: ModeType::SWITCHER,
     };
 
     /// Create a [`Mode`] with all `None`/null fields.

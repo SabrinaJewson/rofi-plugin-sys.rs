@@ -42,7 +42,6 @@ extern "C" {
     #[link_name = "rofi_icon_fetcher_get"]
     pub fn get(uid: u32) -> *mut cairo_sys::cairo_surface_t;
 
-
     /// Retrieves the surface with the icon, writing the result into `surface`.
     /// Returns whether the query succeeded.
     ///

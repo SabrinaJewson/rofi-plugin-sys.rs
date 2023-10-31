@@ -308,7 +308,10 @@ extern "C" {
     #[cfg(not(rofi_next))]
     pub fn get_theme_path(file: *const c_char, ext: *const c_char) -> *mut c_char;
     #[cfg(rofi_next)]
-    pub fn get_theme_path(file: *const c_char, ext: *const *const c_char) -> std::ptr::NonNull<c_char>;
+    pub fn get_theme_path(
+        file: *const c_char,
+        ext: *const *const c_char,
+    ) -> std::ptr::NonNull<c_char>;
 
     /// Find the configuration element.
     /// If not exact, the closest specified element is returned.

@@ -167,4 +167,36 @@ extern "C" {
     /// Returns a newly allocated (valid Pango markup) message to display,
     /// which the user must free.
     pub fn mode_get_message(mode: *const Mode) -> *const c_char;
+
+    /// Returns a new instance of the mode.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    pub fn mode_create(mode: *const Mode) -> *mut Mode;
+
+    /// Acts on the user interaction. Returns the next mode state.
+    ///
+    /// - `mode`: The mode to query
+    /// - `menu_retv`: The menu return value.
+    /// - `input`: Pointer to the user input string. (in, out)
+    /// - `selected_line`: the line selected by the user.
+    /// - `path`: get the path to the selected file. (out)
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    pub fn mode_completer_result(
+        sw: *mut Mode,
+        menu_retv: c_int,
+        input: *mut *mut c_char,
+        selected_line: c_uint,
+        path: *mut *mut c_char,
+    ) -> c_uint;
+
+    /// Check if a mode is a valid completer.
+    ///
+    /// Returns true if the mode can be used as a completer.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    pub fn mode_is_completer(sw: *const Mode) -> glib_sys::gboolean;
 }
