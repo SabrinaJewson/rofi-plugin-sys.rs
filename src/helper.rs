@@ -308,6 +308,7 @@ extern "C" {
     /// - `file` is of type `NonNull<c_char>`.
     /// - `ext` is of type `NonNull<*const c_char>` and is a null-terminated array of file extensions.
     /// - An additional parameter, `parent_dir: *const c_char`, is appended.
+    ///     This is the file that was used to import this file, or NULL.
     #[link_name = "helper_get_theme_path"]
     #[cfg(not(rofi_next))]
     pub fn get_theme_path(file: *const c_char, ext: *const c_char) -> *mut c_char;
