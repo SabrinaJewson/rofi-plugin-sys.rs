@@ -42,6 +42,17 @@ extern "C" {
     #[link_name = "rofi_icon_fetcher_get"]
     pub fn get(uid: u32) -> *mut cairo_sys::cairo_surface_t;
 
+
+    /// Retrieves the surface with the icon, writing the result into `surface`.
+    /// Returns whether the query succeeded.
+    ///
+    /// Accepts a request UID and an out pointer.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    #[link_name = "rofi_icon_fetcher_get_ex"]
+    pub fn get_ex(uid: u32, surface: *mut *mut cairo_sys::cairo_surface_t) -> glib_sys::gboolean;
+
     /// Checks if a file is a supported image (by looking at its extension).
     ///
     /// Returns true if it is an image, false otherwise.

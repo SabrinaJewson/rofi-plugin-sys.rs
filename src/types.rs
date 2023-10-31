@@ -308,6 +308,65 @@ pub struct Property {
     pub value: PropertyValue,
 }
 
+/// Describes the media constraint type.
+///
+/// **Semver-exempt and only available with `cfg(rofi_next)`.**
+#[cfg(any(doc, rofi_next))]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub enum ThemeMediaType {
+    /// Minimum width constraint.
+    MinWidth,
+    /// Maximum width constraint.
+    MaxWidth,
+    /// Minimum height constraint.
+    MinHeight,
+    /// Maximum height constraint.
+    MaxHeight,
+    /// Monitor id constraint.
+    MonId,
+    /// Minimum aspect ratio constraint.
+    MinAspectRatio,
+    /// Maximum aspect ratio constraint.
+    MaxAspectRatio,
+    /// Boolean option for use with env.
+    Boolean,
+    /// Invalid entry.
+    Invalid,
+}
+
+/// Theme media description.
+///
+/// **Semver-exempt and only available with `cfg(rofi_next)`.**
+#[cfg(any(doc, rofi_next))]
+#[derive(Debug, Clone, Copy, PartialEq)]
+#[repr(C)]
+pub struct ThemeMedia {
+    pub r#type: ThemeMediaType,
+    pub value: f64,
+    pub boolv: glib_sys::gboolean,
+}
+
+/// Theme widget.
+///
+/// **Semver-exempt and only available with `cfg(rofi_next)`.**
+#[cfg(any(doc, rofi_next))]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(C)]
+pub struct ThemeWidget {
+    pub set: c_int,
+    pub name: *mut c_char,
+    pub num_widgets: c_uint,
+    pub widgets: *mut *mut ThemeWidget,
+    pub media: *mut ThemeMedia,
+    pub properties: *mut glib_sys::GHashTable,
+    pub parent: *mut ThemeWidget,
+}
+
+/// **Semver-exempt and only available with `cfg(rofi_next)`.**
+#[cfg(any(doc, rofi_next))]
+pub type ConfigEntry = ThemeWidget;
+
 /// Structure to hold a range.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]

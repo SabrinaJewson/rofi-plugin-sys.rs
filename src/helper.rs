@@ -7,6 +7,9 @@ use {
     ::std::os::raw::{c_char, c_int, c_long, c_uint},
 };
 
+#[cfg(any(doc, rofi_next))]
+use crate::{ConfigEntry, Property, PropertyType};
+
 extern "C" {
     /// Parses a string into arguments, replacing keys with values.
     ///
@@ -299,4 +302,40 @@ extern "C" {
     /// - `ext`: File extension passed to option.
     #[link_name = "helper_get_theme_path"]
     pub fn get_theme_path(file: *const c_char, ext: *const c_char) -> *mut c_char;
+
+    /// Find the configuration element.
+    /// If not exact, the closest specified element is returned.
+    /// Returns the [`ThemeWidget`](crate::ThemeWidget) if found, otherwise null.
+    ///
+    /// - `name`: The name of the element to find.
+    /// - `state`: The state of the element.
+    /// - `exact`: If the match should be exact, or the parent can be included.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    #[link_name = "rofi_config_find_widget"]
+    pub fn config_find_widget(
+        name: *const c_char,
+        state: *const c_char,
+        exact: glib_sys::gboolean,
+    ) -> *mut ConfigEntry;
+
+    /// Find the property on the widget.
+    /// If not exact, the parents are searched recursively until match is found.
+    /// Returns the [`Property`] if found, otherwise null.
+    ///
+    /// - `widget`: The widget to find the property on.
+    /// - `type`: The [`PropertyType`] to find.
+    /// - `property`: The property to find.
+    /// - `exact`: If the property should only be found on this widget, or on parents if not found.
+    ///
+    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
+    #[cfg(any(doc, rofi_next))]
+    #[link_name = "rofi_theme_find_property"]
+    pub fn theme_find_property(
+        widget: *mut ConfigEntry,
+        r#type: PropertyType,
+        property: *const c_char,
+        exact: glib_sys::gboolean,
+    ) -> *mut Property;
 }
