@@ -8,7 +8,10 @@ use {
 };
 
 #[cfg(any(doc, rofi_next))]
-use crate::{ConfigEntry, Property, PropertyType};
+use {
+    crate::{ConfigEntry, Property, PropertyType},
+    ::std::ptr::NonNull,
+};
 
 extern "C" {
     /// Parses a string into arguments, replacing keys with values.
@@ -302,16 +305,18 @@ extern "C" {
     /// - `ext`: File extension passed to option.
     ///
     /// **When `cfg(rofi_next)` is enabled**:
-    /// - `ext` is of type `*const *const c_char` and is a null-terminated array of file extensions.
-    /// - The function returns a `NonNull<c_char>`.
+    /// - `file` is of type `NonNull<c_char>`.
+    /// - `ext` is of type `NonNull<*const c_char>` and is a null-terminated array of file extensions.
+    /// - An additional parameter, `parent_dir: *const c_char`, is appended.
     #[link_name = "helper_get_theme_path"]
     #[cfg(not(rofi_next))]
     pub fn get_theme_path(file: *const c_char, ext: *const c_char) -> *mut c_char;
     #[cfg(rofi_next)]
     pub fn get_theme_path(
-        file: *const c_char,
-        ext: *const *const c_char,
-    ) -> std::ptr::NonNull<c_char>;
+        file: NonNull<c_char>,
+        ext: NonNull<*const c_char>,
+        parent_dir: *const c_char,
+    ) -> *mut c_char;
 
     /// Find the configuration element.
     /// If not exact, the closest specified element is returned.

@@ -19,16 +19,21 @@ pub const ABI_VERSION: c_uint = if cfg!(rofi_next) { 7 } else { 6 };
 
 #[cfg(any(doc, rofi_next))]
 bitflags! {
+    /// Indicator what type of mode this is.
+    /// For now it can be the classic switcher, or also implement a completer.
+    ///
     /// **Semver-exempt and only available with `cfg(rofi_next)`.**
     #[repr(transparent)]
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     pub struct ModeType: c_uint {
         /// Mode type is not set.
-        const UNSET = 0b0000;
+        const UNSET = 0x0;
         /// A normal mode.
-        const SWITCHER = 0b0001;
+        const SWITCHER = 0x1;
         /// A mode that can be used to completer.
-        const COMPLETER = 0b0010;
+        const COMPLETER = 0x2;
+        /// DMenu mode.
+        const DMENU = 0x4;
     }
 }
 
