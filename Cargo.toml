@@ -1,6 +1,6 @@
 [package]
 name = "rofi-plugin-sys"
-version = "0.3.2"
+version = "0.4.0"
 edition = "2021"
 rust-version = "1.59.0"
 description = "Raw FFI bindings to Rofi's C plugin interface"
@@ -11,8 +11,8 @@ categories = ["external-ffi-bindings"]
 
 [dependencies]
 bitflags = "2.0.1"
-cairo-sys-rs = "0.17.0"
-glib-sys = "0.17.4"
+cairo-sys-rs = "0.19.2"
+glib-sys = "0.19.0"
 
 [workspace]
 members = ["examples/basic"]
