@@ -46,9 +46,6 @@ extern "C" {
     /// Returns whether the query succeeded.
     ///
     /// Accepts a request UID and an out pointer.
-    ///
-    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
-    #[cfg(any(doc, rofi_next))]
     #[link_name = "rofi_icon_fetcher_get_ex"]
     pub fn get_ex(uid: u32, surface: *mut *mut cairo_sys::cairo_surface_t) -> glib_sys::gboolean;
 

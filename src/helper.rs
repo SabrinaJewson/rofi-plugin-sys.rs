@@ -3,14 +3,11 @@
 //! This corresponds to `helper.h`.
 
 use {
-    crate::{RofiIntMatcher, RofiRangePair},
-    ::std::os::raw::{c_char, c_int, c_long, c_uint},
-};
-
-#[cfg(any(doc, rofi_next))]
-use {
-    crate::{ConfigEntry, Property, PropertyType},
-    ::std::ptr::NonNull,
+    crate::{ConfigEntry, Property, PropertyType, RofiIntMatcher, RofiRangePair},
+    ::std::{
+        os::raw::{c_char, c_int, c_long, c_uint},
+        ptr::NonNull,
+    },
 };
 
 extern "C" {
@@ -302,17 +299,9 @@ extern "C" {
     /// Returns path to theme or copy of filename if not found.
     ///
     /// - `file`: File name passed to option.
-    /// - `ext`: File extension passed to option.
-    ///
-    /// **When `cfg(rofi_next)` is enabled**:
-    /// - `file` is of type `NonNull<c_char>`.
-    /// - `ext` is of type `NonNull<*const c_char>` and is a null-terminated array of file extensions.
-    /// - An additional parameter, `parent_dir: *const c_char`, is appended.
-    ///     This is the file that was used to import this file, or NULL.
+    /// - `ext`: null-terminated array of file extensions.
+    /// - `parent_dir`: the file that was used to import this file, or NULL.
     #[link_name = "helper_get_theme_path"]
-    #[cfg(not(rofi_next))]
-    pub fn get_theme_path(file: *const c_char, ext: *const c_char) -> *mut c_char;
-    #[cfg(rofi_next)]
     pub fn get_theme_path(
         file: NonNull<c_char>,
         ext: NonNull<*const c_char>,
@@ -326,9 +315,6 @@ extern "C" {
     /// - `name`: The name of the element to find.
     /// - `state`: The state of the element.
     /// - `exact`: If the match should be exact, or the parent can be included.
-    ///
-    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
-    #[cfg(any(doc, rofi_next))]
     #[link_name = "rofi_config_find_widget"]
     pub fn config_find_widget(
         name: *const c_char,
@@ -344,9 +330,6 @@ extern "C" {
     /// - `type`: The [`PropertyType`] to find.
     /// - `property`: The property to find.
     /// - `exact`: If the property should only be found on this widget, or on parents if not found.
-    ///
-    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
-    #[cfg(any(doc, rofi_next))]
     #[link_name = "rofi_theme_find_property"]
     pub fn theme_find_property(
         widget: *mut ConfigEntry,

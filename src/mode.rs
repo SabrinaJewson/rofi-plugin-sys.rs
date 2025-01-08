@@ -169,9 +169,6 @@ extern "C" {
     pub fn mode_get_message(mode: *const Mode) -> *const c_char;
 
     /// Returns a new instance of the mode.
-    ///
-    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
-    #[cfg(any(doc, rofi_next))]
     pub fn mode_create(mode: *const Mode) -> *mut Mode;
 
     /// Acts on the user interaction. Returns the next mode state.
@@ -181,9 +178,6 @@ extern "C" {
     /// - `input`: Pointer to the user input string. (in, out)
     /// - `selected_line`: the line selected by the user.
     /// - `path`: get the path to the selected file. (out)
-    ///
-    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
-    #[cfg(any(doc, rofi_next))]
     pub fn mode_completer_result(
         sw: *mut Mode,
         menu_retv: c_int,
@@ -195,8 +189,5 @@ extern "C" {
     /// Check if a mode is a valid completer.
     ///
     /// Returns true if the mode can be used as a completer.
-    ///
-    /// **Semver-exempt and only available with `cfg(rofi_next)`.**
-    #[cfg(any(doc, rofi_next))]
     pub fn mode_is_completer(sw: *const Mode) -> glib_sys::gboolean;
 }

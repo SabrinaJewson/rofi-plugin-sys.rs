@@ -309,9 +309,6 @@ pub struct Property {
 }
 
 /// Describes the media constraint type.
-///
-/// **Semver-exempt and only available with `cfg(rofi_next)`.**
-#[cfg(any(doc, rofi_next))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub enum ThemeMediaType {
@@ -336,9 +333,6 @@ pub enum ThemeMediaType {
 }
 
 /// Theme media description.
-///
-/// **Semver-exempt and only available with `cfg(rofi_next)`.**
-#[cfg(any(doc, rofi_next))]
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(C)]
 pub struct ThemeMedia {
@@ -348,9 +342,6 @@ pub struct ThemeMedia {
 }
 
 /// Theme widget.
-///
-/// **Semver-exempt and only available with `cfg(rofi_next)`.**
-#[cfg(any(doc, rofi_next))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]
 pub struct ThemeWidget {
@@ -363,8 +354,6 @@ pub struct ThemeWidget {
     pub parent: *mut ThemeWidget,
 }
 
-/// **Semver-exempt and only available with `cfg(rofi_next)`.**
-#[cfg(any(doc, rofi_next))]
 pub type ConfigEntry = ThemeWidget;
 
 /// Structure to hold a range.
