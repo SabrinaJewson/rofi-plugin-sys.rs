@@ -149,10 +149,10 @@ extern "C" {
     ///
     ///  Scoring criteria
     ///  - Prefer matches at the start of a word, or the start of subwords in
-    ///  CamelCase/camelCase/camel123 words. See WORD_START_SCORE/CAMEL_SCORE.
+    ///    CamelCase/camelCase/camel123 words. See WORD_START_SCORE/CAMEL_SCORE.
     ///  - Non-word characters matter. See NON_WORD_SCORE.
     ///  - The first characters of words of `pattern` receive bonus because they usually have more
-    ///  significance than the rest. See PATTERN_START_MULTIPLIER/PATTERN_NON_START_MULTIPLIER.
+    ///    significance than the rest. See PATTERN_START_MULTIPLIER/PATTERN_NON_START_MULTIPLIER.
     ///  - Superfluous characters in `str` will reduce the score (gap penalty). See GAP_SCORE.
     ///  - Prefer early occurrence of the first character. See LEADING_GAP_SCORE/GAP_SCORE.
     ///
