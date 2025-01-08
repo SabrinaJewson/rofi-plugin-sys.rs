@@ -12,7 +12,7 @@ such as [rofi-mode](https://docs.rs/rofi-mode).
 
 Set `RUSTFLAGS="--cfg rofi_next"` when building
 to change the API to use unreleased Rofi features
-(as of 2023-10-31).
+(as of 2025-01-08).
 Items only available when this is turned on will be marked
 “**Semver-exempt and only available with `cfg(rofi_next)`.**”
 in the documentation.
