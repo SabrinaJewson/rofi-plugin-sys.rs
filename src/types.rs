@@ -388,6 +388,8 @@ pub struct RofiIntMatcher {
 #[repr(C)]
 pub struct ThreadState {
     pub callback: Option<unsafe extern "C" fn(t: *mut ThreadState, data: *mut c_void)>,
+    pub free: unsafe extern "C" fn(*mut c_void),
+    pub priority: c_int,
 }
 
 extern "C" {
