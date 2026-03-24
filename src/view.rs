@@ -18,4 +18,10 @@ extern "C" {
     /// that confirms this function can be used.
     #[link_name = "rofi_view_reload"]
     pub fn reload();
+
+
+    /// Hide rofi
+    /// see [this comment](https://github.com/davatorium/rofi/issues/2276#issuecomment-4108785896)
+    #[link_name = "rofi_view_hide"]
+    pub fn hide();
 }
