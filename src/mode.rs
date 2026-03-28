@@ -1,12 +1,17 @@
 //! Bindings to mode.h
 
 use {
-    crate::{mode_private::Mode, types::RofiIntMatcher},
+    crate::{mode_private::Mode, types::RofiIntMatcher, GModule},
     ::std::{
         ffi::c_void,
         os::raw::{c_char, c_int, c_uint},
     },
 };
+
+/// ABI version to check if loaded plugin is compatible.
+///
+/// The current value is 7.
+pub const ABI_VERSION: c_uint = 7;
 
 /// Mode to exit Rofi.
 pub const EXIT: c_int = 1000;
@@ -190,4 +195,16 @@ extern "C" {
     ///
     /// Returns true if the mode can be used as a completer.
     pub fn mode_is_completer(sw: *const Mode) -> glib_sys::gboolean;
+
+    /// Get the mode’s ABI version.
+    pub fn mode_get_abi_version(mode: *const Mode) -> c_int;
+
+    /// Set the [`GModule`] used to load this plugin.
+    /// This is used to unload it on shutdown.
+    pub fn mode_plugin_set_module(mode: *mut Mode, module: *mut GModule);
+
+    /// Get the [`GModule`] used to load this plugin.
+    ///
+    /// Returns null if not a plugin.
+    pub fn mode_plugin_get_module(mode: *mut Mode) -> *mut GModule;
 }

@@ -122,11 +122,13 @@ extern "C" {
     /// - `needlelen`: The length of the needle
     /// - `haystack`: The string to match against
     /// - `haystacklen`: The length of the haystack
+    /// - `case_sensitive`: Whether case is significant.
     pub fn levenshtein(
         needle: *const c_char,
         needlelen: c_long,
         haystack: *const c_char,
         haystacklen: c_long,
+        case_sensitive: c_int,
     ) -> c_uint;
 
     /// Convert string to valid UTF-8, replacing invalid parts with replacement character.
@@ -167,12 +169,14 @@ extern "C" {
     /// - `plen`: The length of `pattern`.
     /// - `str`: The input to match against `pattern`.
     /// - `slen`: Length of `str`.
+    /// - `case_sensitive`: Whether case is significant.
     #[link_name = "rofi_scorer_fuzzy_evaluate"]
     pub fn scorer_fuzzy_evaluate(
         pattern: *const c_char,
         plen: c_long,
         str: *const c_char,
         slen: c_long,
+        case_sensitive: c_int,
     ) -> c_int;
 
     /// Compares the `G_NORMALIZE_ALL_COMPOSE` forms of the two strings.
@@ -259,6 +263,11 @@ extern "C" {
     /// - `length`: Length of list.
     pub fn parse_ranges(input: *mut c_char, list: *mut *mut RofiRangePair, length: *mut c_uint);
 
+    /// Get whether string matching should be case sensitive or insensitive.
+    ///
+    /// - `input`: String to parse.
+    pub fn parse_case_sensitivity(input: *const c_char) -> c_int;
+
     /// This functions outputs the formatted string to stdout, appends a newline (`\n`)
     /// character and calls flush on the file descriptor.
     ///
@@ -337,4 +346,13 @@ extern "C" {
         property: *const c_char,
         exact: glib_sys::gboolean,
     ) -> *mut Property;
+
+    /// Get a human-readable string with the current matching method.
+    pub fn helper_get_matching_mode_str() -> *const c_char;
+
+    /// Switch to the next matching method.
+    pub fn helper_select_next_matching_mode();
+
+    /// Switch to the previous matching method.
+    pub fn helper_select_previous_matching_mode();
 }

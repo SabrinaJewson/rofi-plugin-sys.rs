@@ -1,7 +1,7 @@
 //! Bindings to mode-private.h
 
 use {
-    crate::types::RofiIntMatcher,
+    crate::{types::RofiIntMatcher, ABI_VERSION},
     ::std::{
         ffi::c_void,
         os::raw::{c_char, c_int, c_uint},
@@ -10,11 +10,6 @@ use {
     bitflags::bitflags,
     std::mem,
 };
-
-/// ABI version to check if loaded plugin is compatible.
-///
-/// The current value is 7.
-pub const ABI_VERSION: c_uint = 7;
 
 bitflags! {
     /// Indicator what type of mode this is.
