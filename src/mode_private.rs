@@ -158,7 +158,7 @@ pub type ModeCompleterResult = Option<
 /// not the function pointer fields on this type.
 ///
 /// It consists of a name, callback and if enabled a textbox for the sidebar-mode.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy)]
 #[repr(C)]
 pub struct Mode {
     /// Used for external plugins.

@@ -373,7 +373,7 @@ pub struct RofiIntMatcher {
 }
 
 /// Structure with data to process by each worker thread.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy)]
 #[repr(C)]
 pub struct ThreadState {
     pub callback: Option<unsafe extern "C" fn(t: *mut ThreadState, data: *mut c_void)>,

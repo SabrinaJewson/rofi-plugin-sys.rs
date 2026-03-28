@@ -19,9 +19,10 @@ extern "C" {
     #[link_name = "rofi_view_reload"]
     pub fn reload();
 
-
-    /// Hide rofi
-    /// see [this comment](https://github.com/davatorium/rofi/issues/2276#issuecomment-4108785896)
+    /// Hide rofi.
+    ///
+    /// See [this
+    /// comment](https://github.com/davatorium/rofi/issues/2276#issuecomment-4108785896).
     #[link_name = "rofi_view_hide"]
     pub fn hide();
 }
